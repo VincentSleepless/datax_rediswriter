@@ -9,7 +9,7 @@ RedisWriter通过Datax框架获取Reader生成的数据，然后将Datax支持�
 目前支持上游的odpsreader/mysqlreader 可选择指定的若干列做为key组(无分隔符),可选择指定的若干列座位value值(value值可以为json或者带分隔符的字符串)
 
 #### 3 功能说明
-* 该示例从ODPS读一份数据到MongoDB。
+* 该示例从ODPS读一份数据到Redis。
 
 {
     "job": {
