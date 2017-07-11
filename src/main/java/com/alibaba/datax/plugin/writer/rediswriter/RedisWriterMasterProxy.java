@@ -50,6 +50,9 @@ public class RedisWriterMasterProxy {
 
         conf.setValueMode(JedisUtil.checkValueMode(curPluginConfig.getString(RedisKey.KEY_VALUEMODE)));
         conf.setWriteMode(JedisUtil.checkWriteMode(curPluginConfig.getString(RedisKey.KEY_WRITEMODE)));
+      
+        conf.setPipeBatchSize(JedisUtil.checkPipeBatchsize(
+        		curPluginConfig.getString(RedisKey.KEY_PIPELINE_BATCHSIZE)));
         
         //job默认参数设置
         conf.setClusterMode(RedisConst.CLUSTER_REDIS);

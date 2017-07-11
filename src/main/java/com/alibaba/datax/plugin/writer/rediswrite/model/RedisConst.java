@@ -15,10 +15,10 @@ public class RedisConst {
     public final static String VALUEMODE_JSON= "json";
     public final static String VALUEMODE_DELSTR= "delstr";
     
-    
     // redis write mode
-    public final static String WRITEMODE_INSERT= "insert";
-    public final static String WRITEMODE_UPSERT= "upsert";
+    public final static String WRITEMODE_PIPELINE= "pipeline";
+    //pipe batch size
+    public final static int PIPELINE_BATCHSIZE=2000;
     
 	// redis key/value type
     public final static String REDIS_KVTYPE ="String";
@@ -32,5 +32,4 @@ public class RedisConst {
     public final static String PLUGIN_READER_MYSQL="mysqlreader";
     public final static String PLUGIN_READER_ODPS="odpsreader";
     
-	
 }

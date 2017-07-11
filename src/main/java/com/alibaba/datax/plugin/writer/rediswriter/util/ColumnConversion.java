@@ -17,8 +17,8 @@ import com.alibaba.fastjson.JSONObject;
  * 3. double -> bool, binary
  * 4. long   -> binary
  * 
- * 5. 默认支持的类型为 INT LONG  DOUBLE STRING BOOL DATE
- * 6. BAD NULL BYTES 不支持
+ * 5. 默认支持的类型为 INT LONG  DOUBLE STRING BOOL DATE NULL
+ * 6. BAD  BYTES 不支持
  * 
  */
 public class ColumnConversion {

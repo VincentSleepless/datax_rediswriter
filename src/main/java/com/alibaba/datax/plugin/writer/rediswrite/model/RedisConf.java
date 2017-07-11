@@ -21,8 +21,8 @@ public class RedisConf {
 	private String valueMode;
 	//redis 写模式(insert/upsert)
 	private String writeMode;
-	
-	private String batchSize;
+	//redis pipiline模式
+	private int pipeBatchSize;
 	
 	//redis key/column由那些上游传入的record的那些列组成
 	private List<String> redisKeyColumns;
@@ -236,6 +236,17 @@ public class RedisConf {
 		this.restrictConf = restrictConf;
 	}
 
+	public int getPipeBatchSize() {
+		return pipeBatchSize;
+	}
+
+	public void setPipeBatchSize(int pipeBatchSize) {
+		this.pipeBatchSize = pipeBatchSize;
+	}
+
+	
+	
+	
     //do somthing
 	// override to string 
 	

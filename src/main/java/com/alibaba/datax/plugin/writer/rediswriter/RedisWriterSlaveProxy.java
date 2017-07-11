@@ -26,7 +26,6 @@ public class RedisWriterSlaveProxy {
 
 	private int batchSize = 0;
 
-	private static int BATCH_SIZE = 1000;
 
 	/**
 	 * init task job resources
@@ -37,7 +36,7 @@ public class RedisWriterSlaveProxy {
         LOG.info("Initaling redis write task!");
 		conf = GsonParser.jsonToConf(config.getString(RedisKey.KEY_REDIS_CONF));
 		cluster = JedisUtil.initJedisClusterClient(conf);
-		this.batchSize = BATCH_SIZE;
+		this.batchSize = conf.getPipeBatchSize();
 	}
 
 	/**

@@ -19,6 +19,10 @@ public enum RedisError implements ErrorCode {
 	UNSUPPORT_PEER_PLUGIN("RedisWriterError-15","redis unsupported peer plugin"),
 	COLUMN_CONVERT("RedisWriterError-16","redis key/value columns convert error"),
 	COLUMN_VALUE_IS_NULL("RedisWriterError-17","redis key/value columns value is null"),
+	ILLEGAL_PIPE_BATCHSIZE("RedisWriterError-18","redis pipeline batch size is illegal"),
+	
+	
+	
 	JEDIS_CONNECT_TIMEOUT("RedisWriterError-70","Jedis连接超时"),
 	JEDIS_UNKOWN("RedisWriterError-71","jedis连接未知异常"),
 	

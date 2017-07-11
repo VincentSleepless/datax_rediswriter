@@ -15,6 +15,7 @@ public class RedisKey {
     public final static String KEY_VALUECOLUMN = "valueColumn";
     public final static String KEY_VALUEMODE = "valueMode";
     public final static String KEY_WRITEMODE = "writeMode";
+    public final static String KEY_PIPELINE_BATCHSIZE = "pipeBatchSize";
 			
 	// Column(Key Column/Value Column)
     public final static String KEY_COLUMNTYPE = "type";

@@ -225,22 +225,43 @@ public class JedisUtil {
     
     
     /**
-     *  check write-mode   insert/upsert
+     *  check write-mode   pipeline
      * @param writeMode
      * @return
      */
 	public static String checkWriteMode(String writeMode) {
 
-		if (writeMode.equals(RedisConst.WRITEMODE_INSERT)
-				|| writeMode.equals(RedisConst.WRITEMODE_UPSERT)) {
+		if (writeMode.equals(RedisConst.WRITEMODE_PIPELINE)) {
 			return writeMode;
 		}else {
 			throw DataXException.asDataXException(RedisError.INVALID_ADDRESS,
 					"您配置的reids-write-mode不符合校验规范,正确的writeMode配置模式是:"
-							+ " \"writeMode\": \"insert/upsert\",");
+							+ " \"writeMode\": \"pipeline\",");
 		}
 	}
     
+	/**
+	 * 校验pipeline write batch -size
+	 * @param pipeBatchsize
+	 * @return
+	 */
+	public static int checkPipeBatchsize(String pipeBatchsize) {
+
+		try {
+			if (StringUtils.isEmpty(pipeBatchsize)) {
+				return RedisConst.PIPELINE_BATCHSIZE;
+			}
+			int batchSize = Integer.valueOf(pipeBatchsize);
+			return batchSize;
+		} catch (Exception e) {
+			// TODO: handle exception
+			throw DataXException.asDataXException(RedisError.INVALID_ADDRESS,
+					"您配置的reids-write-mode不符合校验规范,正确的writeMode配置模式是:"
+							+ " \"writeMode\": \"pipeline\",");
+		}
+	}
+	
+	
 	
 	/**
 	 * inital redis connection by  jedisCluster
@@ -322,7 +343,7 @@ public class JedisUtil {
 	
 		//get write param
 		List<String> keysColumns = conf.getRedisKeyColumns();
-		List<String> valueColumns = conf.getRedisKeyColumns();
+		List<String> valueColumns = conf.getRedisValueColumns();
 		String valueMode = conf.getValueMode();
 		
 		//create jedis cluster pipline
