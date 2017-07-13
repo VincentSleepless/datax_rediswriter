@@ -1,11 +1,14 @@
 package com.alibaba.datax.plugin.writer.rediswriter;
 
+import io.codis.jodis.RoundRobinJedisPool;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisCluster;
 
 import com.alibaba.datax.common.element.Record;
@@ -14,16 +17,23 @@ import com.alibaba.datax.common.plugin.RecordReceiver;
 import com.alibaba.datax.common.plugin.TaskPluginCollector;
 import com.alibaba.datax.common.util.Configuration;
 import com.alibaba.datax.plugin.writer.rediswrite.model.RedisConf;
+import com.alibaba.datax.plugin.writer.rediswrite.model.RedisConst;
 import com.alibaba.datax.plugin.writer.rediswriter.util.GsonParser;
 import com.alibaba.datax.plugin.writer.rediswriter.util.JedisUtil;
+import com.alibaba.datax.plugin.writer.rediswriter.util.JodisUtil;
 
 public class RedisWriterSlaveProxy {
 
 	private static final Logger LOG = LoggerFactory.getLogger(RedisWriterSlaveProxy.class);
 
 	private RedisConf conf;
-	private JedisCluster cluster;
-
+	
+	private JedisCluster jedisCluster;
+	
+    private RoundRobinJedisPool jodisPool;
+	
+	private Jedis jedis;
+	
 	private int batchSize = 0;
 
 
@@ -35,16 +45,35 @@ public class RedisWriterSlaveProxy {
 	public void init(Configuration config) {
         LOG.info("Initaling redis write task!");
 		conf = GsonParser.jsonToConf(config.getString(RedisKey.KEY_REDIS_CONF));
-		cluster = JedisUtil.initJedisClusterClient(conf);
+		
+		  //inital test connection by cluster_mode 
+        if(RedisConst.CLUSTER_REDIS.equals(conf.getClusterMode())){
+        	this.jedisCluster =JedisUtil.initJedisClusterClient(conf);
+        }
+        if(RedisConst.CLUSTER_CODIS.equals(conf.getClusterMode())){
+        	this.jodisPool = JodisUtil.initJodisRoundRobinPool(conf);
+        	this.jedis = JodisUtil.initJodisCodisClient(jodisPool);
+        }  
+        
 		this.batchSize = conf.getPipeBatchSize();
+		if(this.batchSize==0){
+			this.batchSize = RedisConst.PIPELINE_BATCHSIZE;
+		}
 	}
 
 	/**
 	 * close task job resources
 	 */
 	public void close() {
-		// 关闭连接
-		JedisUtil.clusterClose(this.cluster);
+		
+    	//close connection by cluster_mode 
+        if(RedisConst.CLUSTER_REDIS.equals(conf.getClusterMode())){
+        	JedisUtil.close(this.jedisCluster);
+        }
+        if(RedisConst.CLUSTER_CODIS.equals(conf.getClusterMode())){
+        	JodisUtil.closeJedis(jedis);
+        	JodisUtil.closeJodisPool(jodisPool);
+        }  
 	}
 
 	/**
@@ -54,10 +83,18 @@ public class RedisWriterSlaveProxy {
 	 */
 	public void write(RecordReceiver lineReceiver,TaskPluginCollector collector) {
 		// check param
-		if (conf == null || cluster == null || batchSize == 0) {
-			throw DataXException.asDataXException(
-					RedisError.ILLEGAL_WRITEVPRARM, "redis write task 参数校验失败");
-		}
+		 if(RedisConst.CLUSTER_REDIS.equals(conf.getClusterMode())){
+			if (conf == null || jedisCluster == null || batchSize == 0) {
+				throw DataXException.asDataXException(
+						RedisError.ILLEGAL_WRITEVPRARM, "redis write task 参数校验失败");
+			}
+	     }
+	     if(RedisConst.CLUSTER_CODIS.equals(conf.getClusterMode())){
+				if (conf == null || jodisPool == null ||jedis==null ||batchSize == 0) {
+					throw DataXException.asDataXException(
+							RedisError.ILLEGAL_WRITEVPRARM, "redis write task 参数校验失败");
+				}
+	     }  
 		
 		List<Record> writerBuffer = new ArrayList<Record>(this.batchSize);
 		Record record = null;
@@ -66,14 +103,26 @@ public class RedisWriterSlaveProxy {
 		while((record = lineReceiver.getFromReader()) != null){
 			writerBuffer.add(record);
 			if(writerBuffer.size() >= this.batchSize){
-				//add a router redis-cluster/redis/
-				JedisUtil.doJedisClusterBatchWrite(cluster,conf, writerBuffer);
+								
+				if (RedisConst.CLUSTER_REDIS.equals(conf.getClusterMode())){
+					JedisUtil.doJedisClusterBatchWrite(jedisCluster,conf, writerBuffer);
+				}
+				if (RedisConst.CLUSTER_CODIS.equals(conf.getClusterMode())) {
+					JodisUtil.doJodisCodisBatchWrite(jedis, conf, writerBuffer);
+				}
+
 				writerBuffer.clear();
 			}
 		}
 		//handle when data stops transfer 
 		if(!writerBuffer.isEmpty()) {
-			JedisUtil.doJedisClusterBatchWrite(cluster,conf,writerBuffer);
+			
+			if (RedisConst.CLUSTER_REDIS.equals(conf.getClusterMode())){
+				JedisUtil.doJedisClusterBatchWrite(jedisCluster,conf, writerBuffer);
+			}
+			if (RedisConst.CLUSTER_CODIS.equals(conf.getClusterMode())) {
+				JodisUtil.doJodisCodisBatchWrite(jedis, conf, writerBuffer);
+			}
             writerBuffer.clear();
         }
 	}

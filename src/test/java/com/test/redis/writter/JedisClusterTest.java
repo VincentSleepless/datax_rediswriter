@@ -1,4 +1,4 @@
-package reidswriter;
+package com.test.redis.writter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +10,7 @@ import com.alibaba.datax.plugin.writer.rediswrite.model.RedisRecord;
 import com.alibaba.datax.plugin.writer.rediswriter.util.GsonParser;
 import com.alibaba.datax.plugin.writer.rediswriter.util.JedisUtil;
 
-public class RedisPiplineTest {
+public class JedisClusterTest {
 
     public static void main(String[] args) {
     	

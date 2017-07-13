@@ -8,6 +8,7 @@ public class RedisKey {
 	// current key const
 	public final static String KEY_CLUSTERMODE = "clusterMode";
 	public final static String KEY_ADDRESS = "address";
+	public final static String KEY_ZKPROXYDIR = "zkProxyDir";
 	public final static String KEY_PASSWORD ="password";
 	public final static String KEY_KEYTYPE = "keyType";
 	public final static String KEY_KEYCOLUMN = "keyColumn";

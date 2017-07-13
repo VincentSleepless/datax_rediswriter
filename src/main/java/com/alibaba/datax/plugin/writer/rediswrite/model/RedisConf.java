@@ -4,75 +4,47 @@ import java.util.List;
 
 public class RedisConf {
 	
-	//集群模式(暂不开放配置) redis-cluster/codis-cluster
+	//cluster-mode redis/codis
 	private String clusterMode;
-	
-	//redis cluster 给出负载之后的地址  host:port
-	//codis cluster 给出ha-proxy-url
+	//redis cluster host1:port1,host2:port2......
 	private String address;
-	
+	//master auth
 	private String password;
-	
-	//reids key类型(默认只支持String)
+	//codis cluster jodis zk address
+	private String zkProxyDir;
+	//reids key type(default only String)
 	private String keyType;
-	//redis value类型(默认只支持String)
+	//redis value type(default only String)
 	private String valueType;
-	//redis value模式(分隔符字符串/json字符串) (del-str/json)
+	//redis value mode(del-str/json)
 	private String valueMode;
-	//redis 写模式(insert/upsert)
-	private String writeMode;
-	//redis pipiline模式
+	//redis pipeline batch size sync
 	private int pipeBatchSize;
-	
-	//redis key/column由那些上游传入的record的那些列组成
+	//redis key/column is combined by which colums array
 	private List<String> redisKeyColumns;
 	private List<String> redisValueColumns;
 	
-
-	//一些默认项目比如超时时间等参数
-	//....
+	//jodis round robin pool config
+    private int minIdle =1;
 	
+	private int maxIdle =3;
 	
-	//连接池参数暂不放出来
-	//最大连接数
-	private int jedisMaxActive;
-	//最大空闲连接数
-	private int jedisMaxIdle;
-	//初始化连接
-	private int jedisMinIdle;
-	//最大等待时间(毫秒)
-    private int jedisMaxWait;
-    //释放连接的扫描间隔(毫秒 --3000)
-    private int jedisTimeBetweenEvictionRunsMillis;
-    //连接最小空闲时间(毫秒--1800000)
-    private int jedisMinEvictableIdleTimeMillis;
-    //连接空闲多久后释放, 当空闲时间>该值 且 空闲连接>最大空闲连接数 时直接释放(毫秒--10000)
-    private int jedisSoftMinEvictableIdleTimeMillis;
-    
-    //对拿到的connection进行validateObject校验
-    private boolean jedisTestOnBorrow;
-    //对返回的connection进行validateObject校验
-    private boolean jedisTestOnReturn;
-    //定时对线程池中空闲的链接进行validateObject校验
-    private boolean jedisTestWhileIdle;
-
+	private int maxTotal=5;
 	
-    private RestrictConf restrictConf;
+	private int maxWaitMillis = 3000;
 
-    //redis限制项目
-    public class RestrictConf {
-//        private int requestTotalSizeLimition = 1024 * 1024;
-//       
-//
-//        public int getRequestTotalSizeLimition() {
-//            return requestTotalSizeLimition;
-//        }
-//        public void setRequestTotalSizeLimition(int requestTotalSizeLimition) {
-//            this.requestTotalSizeLimition = requestTotalSizeLimition;
-//        }
-
-    }
-
+	private int minEvictableIdleTimeMillis =3000;
+	
+	private int softMinEvictableIdleTimeMillis = 10000;
+	
+	private int timeBetweenEvictionRunsMillis = 1800000 ;
+	
+	private boolean testOnBorrow = true ;
+	
+	private boolean testOnReturn =false ;
+	
+	private boolean testWhileIdle =true;
+        
 	public String getClusterMode() {
 		return clusterMode;
 	}
@@ -95,6 +67,14 @@ public class RedisConf {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	
+	public String getZkProxyDir() {
+		return zkProxyDir;
+	}
+
+	public void setZkProxyDir(String zkProxyDir) {
+		this.zkProxyDir = zkProxyDir;
 	}
 
 	public String getKeyType() {
@@ -121,14 +101,6 @@ public class RedisConf {
 		this.valueMode = valueMode;
 	}
 
-	public String getWriteMode() {
-		return writeMode;
-	}
-
-	public void setWriteMode(String writeMode) {
-		this.writeMode = writeMode;
-	}
-
 	public List<String> getRedisKeyColumns() {
 		return redisKeyColumns;
 	}
@@ -145,96 +117,6 @@ public class RedisConf {
 		this.redisValueColumns = redisValueColumns;
 	}
 
-	public int getJedisMaxActive() {
-		return jedisMaxActive;
-	}
-
-	public void setJedisMaxActive(int jedisMaxActive) {
-		this.jedisMaxActive = jedisMaxActive;
-	}
-
-	public int getJedisMaxIdle() {
-		return jedisMaxIdle;
-	}
-
-	public void setJedisMaxIdle(int jedisMaxIdle) {
-		this.jedisMaxIdle = jedisMaxIdle;
-	}
-
-	public int getJedisMinIdle() {
-		return jedisMinIdle;
-	}
-
-	public void setJedisMinIdle(int jedisMinIdle) {
-		this.jedisMinIdle = jedisMinIdle;
-	}
-
-	public int getJedisMaxWait() {
-		return jedisMaxWait;
-	}
-
-	public void setJedisMaxWait(int jedisMaxWait) {
-		this.jedisMaxWait = jedisMaxWait;
-	}
-
-	public int getJedisTimeBetweenEvictionRunsMillis() {
-		return jedisTimeBetweenEvictionRunsMillis;
-	}
-
-	public void setJedisTimeBetweenEvictionRunsMillis(
-			int jedisTimeBetweenEvictionRunsMillis) {
-		this.jedisTimeBetweenEvictionRunsMillis = jedisTimeBetweenEvictionRunsMillis;
-	}
-
-	public int getJedisMinEvictableIdleTimeMillis() {
-		return jedisMinEvictableIdleTimeMillis;
-	}
-
-	public void setJedisMinEvictableIdleTimeMillis(
-			int jedisMinEvictableIdleTimeMillis) {
-		this.jedisMinEvictableIdleTimeMillis = jedisMinEvictableIdleTimeMillis;
-	}
-
-	public int getJedisSoftMinEvictableIdleTimeMillis() {
-		return jedisSoftMinEvictableIdleTimeMillis;
-	}
-
-	public void setJedisSoftMinEvictableIdleTimeMillis(
-			int jedisSoftMinEvictableIdleTimeMillis) {
-		this.jedisSoftMinEvictableIdleTimeMillis = jedisSoftMinEvictableIdleTimeMillis;
-	}
-
-	public boolean isJedisTestOnBorrow() {
-		return jedisTestOnBorrow;
-	}
-
-	public void setJedisTestOnBorrow(boolean jedisTestOnBorrow) {
-		this.jedisTestOnBorrow = jedisTestOnBorrow;
-	}
-
-	public boolean isJedisTestOnReturn() {
-		return jedisTestOnReturn;
-	}
-
-	public void setJedisTestOnReturn(boolean jedisTestOnReturn) {
-		this.jedisTestOnReturn = jedisTestOnReturn;
-	}
-
-	public boolean isJedisTestWhileIdle() {
-		return jedisTestWhileIdle;
-	}
-
-	public void setJedisTestWhileIdle(boolean jedisTestWhileIdle) {
-		this.jedisTestWhileIdle = jedisTestWhileIdle;
-	}
-
-	public RestrictConf getRestrictConf() {
-		return restrictConf;
-	}
-
-	public void setRestrictConf(RestrictConf restrictConf) {
-		this.restrictConf = restrictConf;
-	}
 
 	public int getPipeBatchSize() {
 		return pipeBatchSize;
@@ -244,7 +126,85 @@ public class RedisConf {
 		this.pipeBatchSize = pipeBatchSize;
 	}
 
-	
+	public int getSoftMinEvictableIdleTimeMillis() {
+		return softMinEvictableIdleTimeMillis;
+	}
+
+	public void setSoftMinEvictableIdleTimeMillis(int softMinEvictableIdleTimeMillis) {
+		this.softMinEvictableIdleTimeMillis = softMinEvictableIdleTimeMillis;
+	}
+
+	public int getTimeBetweenEvictionRunsMillis() {
+		return timeBetweenEvictionRunsMillis;
+	}
+
+	public void setTimeBetweenEvictionRunsMillis(int timeBetweenEvictionRunsMillis) {
+		this.timeBetweenEvictionRunsMillis = timeBetweenEvictionRunsMillis;
+	}
+
+	public int getMinIdle() {
+		return minIdle;
+	}
+
+	public void setMinIdle(int minIdle) {
+		this.minIdle = minIdle;
+	}
+
+	public int getMaxIdle() {
+		return maxIdle;
+	}
+
+	public void setMaxIdle(int maxIdle) {
+		this.maxIdle = maxIdle;
+	}
+
+	public int getMaxTotal() {
+		return maxTotal;
+	}
+
+	public void setMaxTotal(int maxTotal) {
+		this.maxTotal = maxTotal;
+	}
+
+	public int getMaxWaitMillis() {
+		return maxWaitMillis;
+	}
+
+	public void setMaxWaitMillis(int maxWaitMillis) {
+		this.maxWaitMillis = maxWaitMillis;
+	}
+
+	public int getMinEvictableIdleTimeMillis() {
+		return minEvictableIdleTimeMillis;
+	}
+
+	public void setMinEvictableIdleTimeMillis(int minEvictableIdleTimeMillis) {
+		this.minEvictableIdleTimeMillis = minEvictableIdleTimeMillis;
+	}
+
+	public boolean isTestOnBorrow() {
+		return testOnBorrow;
+	}
+
+	public void setTestOnBorrow(boolean testOnBorrow) {
+		this.testOnBorrow = testOnBorrow;
+	}
+
+	public boolean isTestOnReturn() {
+		return testOnReturn;
+	}
+
+	public void setTestOnReturn(boolean testOnReturn) {
+		this.testOnReturn = testOnReturn;
+	}
+
+	public boolean isTestWhileIdle() {
+		return testWhileIdle;
+	}
+
+	public void setTestWhileIdle(boolean testWhileIdle) {
+		this.testWhileIdle = testWhileIdle;
+	}
 	
 	
     //do somthing

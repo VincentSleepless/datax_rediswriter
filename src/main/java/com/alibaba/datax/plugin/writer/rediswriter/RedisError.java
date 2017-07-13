@@ -4,14 +4,12 @@ import com.alibaba.datax.common.spi.ErrorCode;
 
 public enum RedisError implements ErrorCode {
 
-	//error list
 	REQUIRED_VALUE("RedisWriterError-01", "error necessery config item required value."),
 	INVALID_ADDRESS("RedisWriterError-02","error config item:redis address."),
 	INVALID_CLUSTERMODE("RedisWriterError-03","error config item:redis cluster-mode"),
 	INVALID_VALUEMODE("RedisWriterError-04","error config item:redis value-mode"),
 	INVALID_WRITEMODE("RedisWriterError-05","error config item:redis write-mode"),
-	
-	
+		
 	ILLEGAL_WRITEVPRARM("RedisWriterError-11","redis write task param check fail"),
 	ILLEGAL_ADDRESS("RedisWriterError-12","error config item:redis address"),
 	ILLEGAL_PEERCOLUMN("RedisWriterError-13","redis writer peer plugin colums item required value。"),
@@ -20,19 +18,18 @@ public enum RedisError implements ErrorCode {
 	COLUMN_CONVERT("RedisWriterError-16","redis key/value columns convert error"),
 	COLUMN_VALUE_IS_NULL("RedisWriterError-17","redis key/value columns value is null"),
 	ILLEGAL_PIPE_BATCHSIZE("RedisWriterError-18","redis pipeline batch size is illegal"),
+	INVALID_ZKPROXY("RedisWriterError-19","zkproxy is illegal"),
 	
+	JEDIS_CONNECT_TIMEOUT("RedisWriterError-70","jedis client connect time out"),
+	JEDIS_UNKOWN("RedisWriterError-71","jedis unkown error"),
+	JODIS_POOLINIT_FAIL("RedisWriterError-72","jodis roundrobin pool inital failed"),
+	JODIS_POOLJEDISGET_FAIL("RedisWriterError-73","get jedis instance from  jodis roundrobin pool failed"),
+	JEDIS_CLUSTER_PIPESYNC_FAIL("RedisWriterError-74","jedis cluster pipeline sync failed"),
+	JEDIS_PIPESYNC_FAIL("RedisWriterError-75","jedis pipeline sync failed"),
 	
-	
-	JEDIS_CONNECT_TIMEOUT("RedisWriterError-70","Jedis连接超时"),
-	JEDIS_UNKOWN("RedisWriterError-71","jedis连接未知异常"),
-	
-	
-	SPLIT_ERROR("RedisWriterError-80","redis job split 错误"),
-	WRITE_ERROR("RedisWriterError-81","redis task write 错误"),
-    UNKNOWN("RedisWriterError-99","该错误表示插件的内部错误，表示系统没有处理到的异常");
-	
-	
-	
+	SPLIT_ERROR("RedisWriterError-80","redis job split exception"),
+	WRITE_ERROR("RedisWriterError-81","redis task write exception"),
+    UNKNOWN("RedisWriterError-99","plugin inner exception/unknown exception");
 	
 	
     private final String code;

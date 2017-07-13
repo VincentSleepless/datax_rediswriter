@@ -1,4 +1,4 @@
-package reidswriter;
+package com.test.redis.writter;
 
 import redis.clients.jedis.JedisCluster;
 
@@ -8,7 +8,7 @@ import com.alibaba.datax.plugin.writer.rediswriter.util.JedisUtil;
 import com.alibaba.fastjson.JSONObject;
 
 
-public class JsonTest {
+public class JedisClusterJsonTest {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub

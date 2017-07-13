@@ -26,12 +26,8 @@ public class RedisWriter extends Writer {
 				LOG.info("Peer plugin "+ this.getPeerPluginName()+" info:"+this.getPeerPluginJobConf().toJSON());
 				LOG.info("Current plugin info:"+this.getPluginJobConf().toJSON());
 				//LOG.info("Job conf info:"+this.);
-				
-				
-				
 				//get configuration
-				this.proxy.init(this.getPluginJobConf(),
-						this.getPeerPluginJobConf(),this.getPeerPluginName());
+				this.proxy.init(this.getPluginJobConf(),this.getPeerPluginJobConf(),this.getPeerPluginName());
 			} catch (Exception e) {
 				LOG.error("Exception. ErrorMsg:{}", e.getMessage(), e);
 				throw DataXException.asDataXException(RedisError.UNKNOWN,

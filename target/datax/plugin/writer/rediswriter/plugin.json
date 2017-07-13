@@ -1,6 +1,0 @@
-{
-    "name": "rediswriter",
-    "class": "com.alibaba.datax.plugin.writer.rediswriter.RedisWriter",
-    "description": "useScene: via jedisclient connect redis/codis write data concurrent.",
-    "developer": "zhongan"
-}

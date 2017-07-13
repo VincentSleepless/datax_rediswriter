@@ -21,11 +21,11 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-<!-- 		<dependency> -->
-<!-- 			<groupId>com.alibaba.datax</groupId> -->
-<!-- 			<artifactId>plugin-unstructured-storage-util</artifactId> -->
-<!-- 			<version>${datax-project-version}</version> -->
-<!-- 		</dependency> -->
+		<!-- <dependency> -->
+		<!-- <groupId>com.alibaba.datax</groupId> -->
+		<!-- <artifactId>plugin-unstructured-storage-util</artifactId> -->
+		<!-- <version>${datax-project-version}</version> -->
+		<!-- </dependency> -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
@@ -57,6 +57,14 @@
 			<artifactId>jedis</artifactId>
 			<version>2.9.0</version>
 		</dependency>
+		
+		<!-- https://mvnrepository.com/artifact/io.codis.jodis/jodis -->
+		<dependency>
+			<groupId>io.codis.jodis</groupId>
+			<artifactId>jodis</artifactId>
+			<version>0.4.0</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>

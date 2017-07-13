@@ -3,6 +3,7 @@
     "parameter": {
         "clusterMode": "",
         "address": "",
+        "zkProxyDir":"",
         "password": "",
         "keyColumn": [],
         "valueColumn": [],
